@@ -1,0 +1,502 @@
+import "engine_sim.mr"
+
+units units()
+constants constants()
+impulse_response_library ir_lib()
+label cycle(3 * 360 * units.deg)
+label vee(60.0 * units.deg)
+label cyl(36)
+
+private node wires {
+    output wire1: ignition_wire();
+    output wire2: ignition_wire();
+    output wire3: ignition_wire();
+    output wire4: ignition_wire();
+    output wire5: ignition_wire();
+    output wire6: ignition_wire();
+    output wire7: ignition_wire();
+    output wire8: ignition_wire();
+    output wire9: ignition_wire();
+    output wire10: ignition_wire();
+    output wire11: ignition_wire();
+    output wire12: ignition_wire();
+}
+
+private node wankel_4_rotor {
+    alias output __out: engine;
+
+    wankel_engine engine(
+        name: "12-ROTOR MADE BY KWIQ",
+        starter_torque: 200 * units.lb_ft,
+        starter_speed: 2000 * units.rpm,
+        redline: 10000 * units.rpm,
+        fuel: fuel(
+            molecular_mass: 120 * units.g,
+            energy_density: 75 * units.kJ / units.g,
+            density: 0.700 * units.kg / units.L,
+            molecular_afr: 15,
+            max_turbulence_effect: 4.0,
+            max_dilution_effect: 10.0,
+            burning_efficiency_randomness: 0.05,
+            max_burning_efficiency: 1.7
+        ),
+        throttle_gamma: 4.0,
+        hf_gain: 0.01,
+        noise: 1.0,
+        jitter: 0.5,
+        simulation_frequency: 6000,
+        rotor_calculation_quality: 1024,
+        rotor_housing_resolution: 1024
+    )
+
+    wires wires()
+
+    label stroke(32 * units.mm)
+    label radius(105 * units.mm)
+    label depth(80 * units.mm)
+    label intake_port_start(120 * units.deg)
+    label intake_port_end(150 * units.deg)
+    label exhaust_port_start(220 * units.deg)
+    label exhaust_port_end(250 * units.deg)
+    label rotor_mass(2000 * units.g)
+    label rotor_I(disk_moment_of_inertia(mass: rotor_mass, radius: radius))
+
+    crankshaft c0(
+        throw: 0.5 * stroke,
+        flywheel_mass: 5 * units.lb,
+        mass: 5 * units.lb,
+        friction_torque: 15.0 * units.lb_ft,
+        moment_of_inertia: 0.22986844776863666 * 0.5,
+        position_x: 0.0,
+        position_y: 0.0,
+        tdc: 0.0
+    )
+
+    rod_journal rj0(angle: 0.0 * units.deg)
+    rod_journal rj1(angle: 180 * units.deg)
+    rod_journal rj2(angle: 90 * units.deg)
+    rod_journal rj3(angle: 270 * units.deg)
+    rod_journal rj4(angle: 0.0 * units.deg)
+    rod_journal rj5(angle: 180 * units.deg)
+    rod_journal rj6(angle: 90 * units.deg)
+    rod_journal rj7(angle: 270 * units.deg)
+    rod_journal rj8(angle: 0.0 * units.deg)
+    rod_journal rj9(angle: 180 * units.deg)
+    rod_journal rj10(angle: 90 * units.deg)
+    rod_journal rj11(angle: 270 * units.deg)
+    c0
+        .add_rod_journal(rj0)
+        .add_rod_journal(rj1)
+        .add_rod_journal(rj2)
+        .add_rod_journal(rj3)
+        .add_rod_journal(rj4)
+        .add_rod_journal(rj5)
+        .add_rod_journal(rj6)
+        .add_rod_journal(rj7)
+        .add_rod_journal(rj8)
+        .add_rod_journal(rj9)
+        .add_rod_journal(rj10)
+        .add_rod_journal(rj11)
+
+    engine.add_crankshaft(c0)
+
+    wankel_rotor rotor0(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: 60 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor1(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: 0 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor2(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: -30 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor3(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: 30 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor4(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: 60 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor5(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: 0 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor6(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: -30 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor7(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: 30 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor8(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: 60 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor9(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: 0 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor10(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: -30 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    wankel_rotor rotor11(
+        mass: 5000 * units.g,
+        moment_of_inertia: rotor_I,
+        radius: radius,
+        crown_gear_radius: 3 * 0.5 * stroke,
+        angle: 30 * units.deg,
+        depth: depth,
+        depression_volume: 38 * units.cc
+    )
+
+    chevy_bbc_stock_intake intake(
+        carburetor_cfm: 2200.0,
+        idle_flow_rate_cfm: 1.0, //0.15,
+        idle_throttle_plate_position: 0.9918 // 0.9985
+    )
+
+    exhaust_system_parameters es_params(
+        outlet_flow_rate: k_carb(5500.0),
+        primary_tube_length: 10.0 * units.inch,
+        primary_flow_rate: k_carb(500.0),
+        velocity_decay: 1.0, //0.5
+        length: 100.0 * units.inch
+    )
+
+    exhaust_system exhaust0(
+        es_params,
+        length: (140 + 72.0) * units.inch,
+        audio_volume: 5.5,
+        impulse_response: ir_lib.minimal_muffling_02)
+
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor0,
+        rj0,
+        wires.wire1,
+        sound_attenuation: 1.0,
+        primary_length: 3 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor1,
+        rj1,
+        wires.wire2,
+        sound_attenuation: 0.9,
+        primary_length: 1 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor2,
+        rj2,
+        wires.wire3,
+        sound_attenuation: 0.6,
+        primary_length: 5 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor3,
+        rj3,
+        wires.wire4,
+        sound_attenuation: 1.0,
+        primary_length: 10 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor4,
+        rj4,
+        wires.wire5,
+        sound_attenuation: 1.0,
+        primary_length: 3 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor5,
+        rj5,
+        wires.wire6,
+        sound_attenuation: 0.9,
+        primary_length: 1 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor6,
+        rj6,
+        wires.wire7,
+        sound_attenuation: 0.6,
+        primary_length: 5 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor7,
+        rj7,
+        wires.wire8,
+        sound_attenuation: 1.0,
+        primary_length: 10 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor8,
+        rj8,
+        wires.wire9,
+        sound_attenuation: 1.0,
+        primary_length: 3 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor9,
+        rj9,
+        wires.wire10,
+        sound_attenuation: 0.9,
+        primary_length: 1 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor10,
+        rj10,
+        wires.wire11,
+        sound_attenuation: 0.6,
+        primary_length: 5 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+    engine.add_rotor(
+        intake,
+        exhaust0,
+        rotor11,
+        rj11,
+        wires.wire12,
+        sound_attenuation: 1.0,
+        primary_length: 10 * units.inch,
+        intake_port: default_wankel_peripheral_port(intake_port_start, intake_port_end, k_carb(300.0)),
+        exhaust_port: default_wankel_peripheral_port(exhaust_port_start, exhaust_port_end, k_carb(300.0)),
+        intake_runner_cross_section_area: 4 * units.cm2,
+        exhaust_cross_section_area: 4 * units.cm2,
+        spark_plug_angle: 0
+    )
+
+    function timing_curve(1000 * units.rpm)
+    timing_curve
+        .add_sample(0000 * units.rpm, 35 * units.deg)
+        .add_sample(1000 * units.rpm, 35 * units.deg)
+        .add_sample(2000 * units.rpm, 45 * units.deg)
+        .add_sample(3000 * units.rpm, 55 * units.deg)
+        .add_sample(4000 * units.rpm, 60 * units.deg)
+        .add_sample(5000 * units.rpm, 65 * units.deg)
+        .add_sample(6000 * units.rpm, 75 * units.deg)
+        .add_sample(7000 * units.rpm, 85 * units.deg)
+        .add_sample(8000 * units.rpm, 85 * units.deg)
+        .add_sample(9000 * units.rpm, 85 * units.deg)
+        .add_sample(10000 * units.rpm, 75 * units.deg)
+        .add_sample(11000 * units.rpm, 65 * units.deg)
+        .add_sample(12000 * units.rpm, 70 * units.deg)
+
+    engine.add_ignition_module(
+        ignition_module(timing_curve: timing_curve, rev_limit: 10000 * units.rpm, limiter_duration: 0.025)
+            .connect_wire(wires.wire1, (0.0/cyl) * cycle)
+            .connect_wire(wires.wire5, (2.0/cyl) * cycle)
+            .connect_wire(wires.wire3, (4.0/cyl) * cycle)
+            .connect_wire(wires.wire6, (6.0/cyl) * cycle)
+            .connect_wire(wires.wire2, (8.0/cyl) * cycle)
+            .connect_wire(wires.wire4, (10.0/cyl) * cycle)
+            .connect_wire(wires.wire7, (0.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire11, (2.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire9, (4.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire12, (6.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire8, (8.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire10, (10.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire1, (11.0/cyl) * cycle)
+            .connect_wire(wires.wire5, (13.0/cyl) * cycle)
+            .connect_wire(wires.wire3, (15.0/cyl) * cycle)
+            .connect_wire(wires.wire6, (17.0/cyl) * cycle)
+            .connect_wire(wires.wire2, (19.0/cyl) * cycle)
+            .connect_wire(wires.wire4, (21.0/cyl) * cycle)
+            .connect_wire(wires.wire7, (11.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire11, (13.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire9, (15.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire12, (17.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire8, (19.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire10, (21.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire1, (22.0/cyl) * cycle)
+            .connect_wire(wires.wire5, (24.0/cyl) * cycle)
+            .connect_wire(wires.wire3, (26.0/cyl) * cycle)
+            .connect_wire(wires.wire6, (28.0/cyl) * cycle)
+            .connect_wire(wires.wire2, (30.0/cyl) * cycle)
+            .connect_wire(wires.wire4, (32.0/cyl) * cycle)
+            .connect_wire(wires.wire7, (22.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire11, (24.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire9, (26.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire12, (28.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire8, (30.0/cyl) * cycle + vee)
+            .connect_wire(wires.wire10, (32.0/cyl) * cycle + vee)
+    )
+}
+
+label car_mass(1398 * units.kg)
+
+private node f1_vehicle {
+    alias output __out:
+        vehicle(
+            mass: 1798 * units.kg,
+            drag_coefficient: 0.3,
+            cross_sectional_area: (72 * units.inch) * (36 * units.inch),
+            diff_ratio: 4.10,
+            tire_radius: 9 * units.inch,
+            rolling_resistance: 200 * units.N
+        );
+}
+
+private node f1_transmission {
+    alias output __out:
+        transmission(
+            max_clutch_torque: 7000 * units.lb_ft
+        )
+        .add_gear(1.2)
+        .add_gear(0.99)
+        .add_gear(0.73)
+        .add_gear(0.633)
+        .add_gear(0.535)
+        .add_gear(0.49);
+}
+
+public node main {
+    set_engine(wankel_4_rotor())
+    set_vehicle(f1_vehicle())
+    set_transmission(f1_transmission())
+}
+
+main()
